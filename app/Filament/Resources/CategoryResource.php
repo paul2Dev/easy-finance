@@ -31,7 +31,7 @@ class CategoryResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->label('Image')
                     ->disk('public') // Use 'public' disk or any custom disk you defined
-                    ->directory('uploads/images') // Directory within the disk
+                    ->directory('uploads/images/categories') // Directory within the disk
                     ->visibility('public') // Make the file publicly accessible
                     ->image()
                     ->imagePreviewHeight(150)
