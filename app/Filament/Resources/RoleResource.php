@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\RoleResource\Pages;
+use App\Filament\Resources\RoleResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,16 +11,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\Section;
 
-class CategoryResource extends Resource
+class RoleResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-finger-print';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function form(Form $form): Form
     {
@@ -33,15 +34,7 @@ class CategoryResource extends Resource
                     ->minLength(3)
                     ->maxLength(255)
                     ->required(),
-                Forms\Components\FileUpload::make('image')
-                    ->label('Image')
-                    ->disk('public') // Use 'public' disk or any custom disk you defined
-                    ->directory('uploads/images/categories') // Directory within the disk
-                    ->visibility('public') // Make the file publicly accessible
-                    ->image()
-                    ->imagePreviewHeight(150)
-                    ->required(),
-                ])->columns(2)
+                ])
             ]);
     }
 
@@ -54,12 +47,7 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
-                    ->disk('public') // Specify the disk, if needed
-                    //->url(fn ($record) => Storage::disk('public')->url($record->image)) // Optional: make image clickable
-                    ->square() // Optional: display image as square
-                    ->size(50), // Set the display size of the image in the table
+                //
             ])
             ->defaultSort('id', 'desc')
             ->filters([
@@ -86,9 +74,14 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListRoles::route('/'),
+            'create' => Pages\CreateRole::route('/create'),
+            'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('name', '!=', 'admin');
     }
 }

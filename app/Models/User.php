@@ -3,11 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Filament\Models\Contracts\FilamentUser;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -48,15 +50,9 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
-    public function canAccessFilament(): bool
+    public function canAccessPanel(Panel $panel): bool
     {
-        // Only allow users with the 'Admin' role to access Filament
-        return $this->hasRole('Admin');
+        return $this->hasRole('admin');
     }
 
-    public function canAccessPanel($panel): bool
-    {
-        // Apply similar logic here or customize it further if needed
-        return $this->canAccessFilament();
-    }
 }

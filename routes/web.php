@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 Route::get('/', function () {
+    $user = User::find(2); // Replace with the actual user ID
+    $user->assignRole('user'); // Or 'User'
     return view('welcome');
 });
 
