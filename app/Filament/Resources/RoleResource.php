@@ -11,8 +11,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\Section;
+use App\Models\Role;
 
 class RoleResource extends Resource
 {
