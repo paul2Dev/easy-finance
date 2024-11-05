@@ -51,18 +51,27 @@ class ExpenseResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('category.name')->label('Category'),
-                Tables\Columns\TextColumn::make('date')->label('Date')->date(),
+                Tables\Columns\TextColumn::make('category.name')
+                ->label('Category')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('date')
+                ->label('Date')
+                ->date(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Amount')
                     ->formatStateUsing(fn ($state) => '$' . number_format($state, 0)),
-                Tables\Columns\TextColumn::make('description')->label('Description')->limit(50),
+                Tables\Columns\TextColumn::make('description')
+                ->label('Description')
+                ->searchable()
+                ->limit(50),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
