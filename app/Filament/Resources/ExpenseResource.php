@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BudgetResource\Pages;
-use App\Filament\Resources\BudgetResource\RelationManagers;
-use App\Models\Budget;
+use App\Filament\Resources\ExpenseResource\Pages;
+use App\Filament\Resources\ExpenseResource\RelationManagers;
+use App\Models\Expense;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,13 +13,12 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-use Filament\Forms\Components\Hidden;
 
-class BudgetResource extends Resource
+class ExpenseResource extends Resource
 {
-    protected static ?string $model = Budget::class;
+    protected static ?string $model = Expense::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-circle';
 
     public static function form(Form $form): Form
     {
@@ -28,11 +27,22 @@ class BudgetResource extends Resource
                 Forms\Components\Hidden::make('user_id')
                     ->default(Auth::id()),
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name')
+                ->label('Category')
+                ->relationship('category', 'name')
+                ->required(),
+
+                Forms\Components\DatePicker::make('date')
+                    ->label('Date')
                     ->required(),
+
                 Forms\Components\TextInput::make('amount')
+                    ->label('Amount')
                     ->numeric()
                     ->required(),
+
+                Forms\Components\Textarea::make('description')
+                    ->label('Description')
+                    ->nullable(),
             ]);
     }
 
@@ -41,9 +51,11 @@ class BudgetResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')->label('Category'),
+                Tables\Columns\TextColumn::make('date')->label('Date')->date(),
                 Tables\Columns\TextColumn::make('amount')
-                ->formatStateUsing(fn ($record) => '$' . number_format($record->amount))
-                ->label('Amount')
+                    ->label('Amount')
+                    ->formatStateUsing(fn ($state) => '$' . number_format($state, 0)),
+                Tables\Columns\TextColumn::make('description')->label('Description')->limit(50),
             ])
             ->filters([
                 //
@@ -68,9 +80,9 @@ class BudgetResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBudgets::route('/'),
-            'create' => Pages\CreateBudget::route('/create'),
-            'edit' => Pages\EditBudget::route('/{record}/edit'),
+            'index' => Pages\ListExpenses::route('/'),
+            'create' => Pages\CreateExpense::route('/create'),
+            'edit' => Pages\EditExpense::route('/{record}/edit'),
         ];
     }
 }
