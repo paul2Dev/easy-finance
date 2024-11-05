@@ -33,6 +33,14 @@ class CategoryResource extends Resource
                     ->minLength(3)
                     ->maxLength(255)
                     ->required(),
+                Forms\Components\Select::make('type')
+                    ->label('Type')
+                    ->options([
+                        'income' => 'Income',
+                        'expense' => 'Expense',
+                    ])
+                    ->default('expense')
+                    ->required(),
                 Forms\Components\FileUpload::make('image')
                     ->label('Image')
                     ->disk('public') // Use 'public' disk or any custom disk you defined
@@ -51,9 +59,15 @@ class CategoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Type')
+                    ->formatStateUsing(fn ($state) => ucfirst($state)),
+
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Image')
                     ->disk('public') // Specify the disk, if needed

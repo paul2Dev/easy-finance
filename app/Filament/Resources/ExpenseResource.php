@@ -26,10 +26,11 @@ class ExpenseResource extends Resource
             ->schema([
                 Forms\Components\Hidden::make('user_id')
                     ->default(Auth::id()),
+
                 Forms\Components\Select::make('category_id')
-                ->label('Category')
-                ->relationship('category', 'name')
-                ->required(),
+                    ->label('Category')
+                    ->relationship('category', 'name', fn ($query) => $query->expense()) // Only expense categories
+                    ->required(),
 
                 Forms\Components\DatePicker::make('date')
                     ->label('Date')

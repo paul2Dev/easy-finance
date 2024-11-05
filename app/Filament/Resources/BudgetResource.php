@@ -27,9 +27,11 @@ class BudgetResource extends Resource
             ->schema([
                 Forms\Components\Hidden::make('user_id')
                     ->default(Auth::id()),
+
                 Forms\Components\Select::make('category_id')
                     ->relationship('category', 'name')
                     ->required(),
+
                 Forms\Components\TextInput::make('amount')
                     ->numeric()
                     ->required(),
