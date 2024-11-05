@@ -53,13 +53,16 @@ class IncomeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                 ->label('Category')
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                 ->label('Date')
-                ->date(),
+                ->date()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Amount')
-                    ->formatStateUsing(fn ($state) => '$' . number_format($state, 0)),
+                    ->formatStateUsing(fn ($state) => '$' . number_format($state, 0))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                 ->label('Description')
                 ->searchable()

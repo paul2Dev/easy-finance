@@ -44,9 +44,11 @@ class BudgetResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                 ->label('Category')
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                 ->formatStateUsing(fn ($record) => '$' . number_format($record->amount))
+                ->sortable()
                 ->label('Amount')
             ])
             ->defaultSort('id', 'desc')
