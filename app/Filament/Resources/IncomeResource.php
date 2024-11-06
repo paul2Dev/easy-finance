@@ -61,7 +61,7 @@ class IncomeResource extends Resource
                 ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Amount')
-                    ->formatStateUsing(fn ($state) => '$' . number_format($state, 0))
+                    ->formatStateUsing(fn ($state) =>  number_format($state, 0) .' '. config('filament.currency.code'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                 ->label('Description')

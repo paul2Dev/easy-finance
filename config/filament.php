@@ -86,4 +86,11 @@ return [
 
     'livewire_loading_delay' => 'default',
 
+    'currency' => [
+        'code' => 'RON',
+        'decimals' => 2,
+        'decimal_separator' => '.',
+        'thousands_separator' => ',',
+    ],
+
 ];

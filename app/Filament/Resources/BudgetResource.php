@@ -47,7 +47,7 @@ class BudgetResource extends Resource
                 ->searchable()
                 ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
-                ->formatStateUsing(fn ($record) => '$' . number_format($record->amount))
+                ->formatStateUsing(fn ($record) => number_format($record->amount) .' '. config('filament.currency.code'))
                 ->sortable()
                 ->label('Amount')
             ])
