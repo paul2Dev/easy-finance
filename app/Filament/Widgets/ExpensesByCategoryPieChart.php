@@ -10,6 +10,8 @@ class ExpensesByCategoryPieChart extends ChartWidget
 {
     protected static ?string $heading = 'Expenses by Category';
 
+    protected static ?int $sort = 2;
+
     protected function getData(): array
     {
         // Query expenses grouped by category and sum their amounts

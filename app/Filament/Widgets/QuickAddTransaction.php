@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 
 
-class QuickAddTransactionWidget extends Widget implements Forms\Contracts\HasForms
+class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
 {
     use Forms\Concerns\InteractsWithForms;
 
