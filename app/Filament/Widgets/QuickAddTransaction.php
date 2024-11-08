@@ -19,7 +19,7 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
 {
     use Forms\Concerns\InteractsWithForms;
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 4;
 
     protected static string $view = 'filament.widgets.quick-add-transaction-widget';
 

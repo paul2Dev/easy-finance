@@ -3,14 +3,13 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
-use App\Models\Category;
 use App\Models\Expense;
 
 class ExpensesByCategoryPieChart extends ChartWidget
 {
-    protected static ?string $heading = 'Expenses by Category';
+    protected static ?string $heading = 'Current Month Expenses Categories';
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     protected function getData(): array
     {
@@ -18,6 +17,7 @@ class ExpensesByCategoryPieChart extends ChartWidget
         $expensesByCategory = Expense::selectRaw('category_id, SUM(amount) as total')
             ->groupBy('category_id')
             ->with('category') // Make sure category relationship is loaded
+            ->whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()]) // Filter by current month
             ->get();
 
         // Prepare data for chart

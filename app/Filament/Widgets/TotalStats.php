@@ -12,6 +12,8 @@ use Carbon\Carbon;
 class TotalStats extends BaseWidget
 {
 
+    protected static ?int $sort = 1;
+
     protected function getStats(): array
     {
         $userId = Auth::id();
@@ -69,6 +71,8 @@ class TotalStats extends BaseWidget
         // Calculate the total expenses for the current month up to the last expense date
         $totalMonthlyExpenses = number_format(array_sum($dailyExpenses)) .' '. config('filament.currency.code');
 
+        $cashFlow = number_format(array_sum($dailyIncomes) - array_sum($dailyExpenses)) .' '. config('filament.currency.code');
+
         return [
             Stat::make('Incomes', $totalMonthlyIncomes)
                 ->description('Total Incomes for this month')
@@ -80,7 +84,7 @@ class TotalStats extends BaseWidget
                 ->descriptionIcon('heroicon-o-arrow-trending-down')
                 ->color('danger')
                 ->chart($dailyExpenses), // Pass daily expenses up to the last expense day to the chart
-            Stat::make('Cash Flow', number_format(array_sum($dailyIncomes) - array_sum($dailyExpenses)))
+            Stat::make('Cash Flow', $cashFlow)
                 ->description('Remaining cash flow for this month')
                 ->descriptionIcon('heroicon-o-banknotes')
                 ->color('warning')
