@@ -93,4 +93,11 @@ return [
         'thousands_separator' => ',',
     ],
 
+    'investment_currency' => [
+        'code' => 'EUR',
+        'decimals' => 2,
+        'decimal_separator' => '.',
+        'thousands_separator' => ',',
+    ],
+
 ];
