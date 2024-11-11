@@ -49,25 +49,27 @@ class InvestmentResource extends Resource
             Forms\Components\TextInput::make('quantity')
                 ->numeric()
                 ->required()
-                ->reactive() // Makes it responsive to changes
+                ->reactive()
+                ->debounce(1000)
                 //if the quantity field changes, the total field will be updated
                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                     // Access the 'price' field value from the form state
                     $price = $get('price') ?? 0; // Get the 'price' value from the form state
                     $total = $state * $price; // Calculate total (quantity * price)
-                    $set('total', number_format($total, 2)); // Set the total field
+                    $set('total', $total); // Set the total field
                 }),
 
             Forms\Components\TextInput::make('price')
                 ->numeric()
                 ->required()
                 ->reactive()
+                ->debounce(1000)
                 //if the price field changes, the total field will be updated
                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                     // Access the 'quantity' field value from the form state
                     $quantity = $get('quantity') ?? 0; // Get the 'quantity' value from the form state
                     $total = $state * $quantity; // Calculate total (quantity * price)
-                    $set('total', number_format($total, 2)); // Set the total field
+                    $set('total', $total); // Set the total field
                 }),
 
 
