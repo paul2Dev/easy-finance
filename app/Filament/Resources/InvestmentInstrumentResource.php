@@ -60,6 +60,7 @@ class InvestmentInstrumentResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->limit(50),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])

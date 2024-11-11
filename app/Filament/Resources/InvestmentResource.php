@@ -120,6 +120,7 @@ class InvestmentResource extends Resource
                     ->sortable()
                     ->formatStateUsing(fn ($state) =>  $state .' '. config('filament.currency.code')),
             ])
+            ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])
