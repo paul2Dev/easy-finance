@@ -55,7 +55,7 @@ class InvestmentResource extends Resource
                     // Access the 'price' field value from the form state
                     $price = $get('price') ?? 0; // Get the 'price' value from the form state
                     $total = $state * $price; // Calculate total (quantity * price)
-                    $set('total', $total); // Set the total field
+                    $set('total', number_format($total, 2)); // Set the total field
                 }),
 
             Forms\Components\TextInput::make('price')
@@ -67,7 +67,7 @@ class InvestmentResource extends Resource
                     // Access the 'quantity' field value from the form state
                     $quantity = $get('quantity') ?? 0; // Get the 'quantity' value from the form state
                     $total = $state * $quantity; // Calculate total (quantity * price)
-                    $set('total', $total); // Set the total field
+                    $set('total', number_format($total, 2)); // Set the total field
                 }),
 
 
@@ -92,9 +92,21 @@ class InvestmentResource extends Resource
                     ->sortable()
                     ->searchable(),
 
+                Tables\Columns\TextColumn::make('investmentInstrument.type')
+                    ->label('Type')
+                    ->sortable()
+                    ->searchable()
+                    ->colors([
+                        'success' => 'etf',
+                        'warning' => 'stocks',
+                        'danger' => 'crypto',
+                    ])
+                    ->badge(),
+
                 Tables\Columns\TextColumn::make('date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->badge(),
 
                 Tables\Columns\TextColumn::make('type')
                     ->sortable()
@@ -113,7 +125,8 @@ class InvestmentResource extends Resource
 
                 Tables\Columns\TextColumn::make('total')
                     ->sortable()
-                    ->formatStateUsing(fn ($state) =>  $state .' '. config('filament.investment_currency.code')),
+                    ->formatStateUsing(fn ($state) =>  $state .' '. config('filament.investment_currency.code'))
+                    ->badge(),
 
                 Tables\Columns\TextColumn::make('conversion_rate')
                     ->label('Conversion Rate')
