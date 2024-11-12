@@ -8,7 +8,7 @@ use App\Filament\Widgets\PortfolioDistributionByName;
 
 class PortfolioStatistics extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-pie';
     protected static ?string $navigationLabel = 'Portfolio Statistics';
 
     protected static ?int $navigationSort = 6;
