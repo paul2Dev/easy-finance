@@ -2,9 +2,12 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\InvestmentInstrumentsTable;
 use Filament\Pages\Page;
 use App\Filament\Widgets\PortfolioDistributionByType;
 use App\Filament\Widgets\PortfolioDistributionByName;
+use App\Filament\Widgets\TotalInvestmentStats;
+
 
 class PortfolioStatistics extends Page
 {
@@ -18,8 +21,10 @@ class PortfolioStatistics extends Page
     protected function getHeaderWidgets(): array
     {
         return [
+            TotalInvestmentStats::class,
             PortfolioDistributionByType::class,
             PortfolioDistributionByName::class,
+            InvestmentInstrumentsTable::class,
         ];
     }
 }

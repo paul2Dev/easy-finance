@@ -43,6 +43,10 @@ class InvestmentInstrumentResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->label('Description')
                     ->nullable(),
+
+                Forms\Components\TextInput::make('ticker')
+                    ->placeholder('Enter Yahoo Finance ticker, e.g., IWDA.AS')
+                    ->required(), // Add ticker input field,
             ]);
     }
 
@@ -59,6 +63,9 @@ class InvestmentInstrumentResource extends Resource
 
                 Tables\Columns\TextColumn::make('description')
                     ->limit(50),
+
+                Tables\Columns\TextColumn::make('ticker')
+                    ->sortable(),
             ])
             ->defaultSort('id', 'desc')
             ->filters([

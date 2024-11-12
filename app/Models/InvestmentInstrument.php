@@ -6,19 +6,23 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use Exception;
+use Log;
 
 
 class InvestmentInstrument extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'type', 'description'];
+    protected $fillable = ['user_id', 'name', 'type', 'description', 'ticker', 'price'];
 
     protected static function booted()
     {
         static::addGlobalScope('user', function (Builder $builder) {
             if (Auth::check()) {
-                $builder->where('user_id', Auth::id());
+                $builder->where('investment_instruments.user_id', Auth::id());
             }
         });
     }

@@ -16,7 +16,6 @@ class PortfolioDistributionByType extends ChartWidget
     {
         // Get total investment grouped by instrument type for the authenticated user
         $investments = Investment::with('instrument')
-            ->where('user_id', Auth::id())
             ->get()
             ->groupBy('instrument.type');
 

@@ -29,7 +29,7 @@ class InvestmentResource extends Resource
 
             Forms\Components\Select::make('investment_instrument_id')
                 ->label('Investment Instrument')
-                ->relationship('investmentInstrument', 'name')
+                ->relationship('instrument', 'name')
                 ->required(),
 
             Forms\Components\DatePicker::make('date')
@@ -89,12 +89,13 @@ class InvestmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('investmentInstrument.name')
+                Tables\Columns\TextColumn::make('instrument.name')
                     ->label('Instrument')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->limit(25),
 
-                Tables\Columns\TextColumn::make('investmentInstrument.type')
+                Tables\Columns\TextColumn::make('instrument.type')
                     ->label('Type')
                     ->sortable()
                     ->searchable()
@@ -123,17 +124,17 @@ class InvestmentResource extends Resource
 
                 Tables\Columns\TextColumn::make('price')
                     ->sortable()
-                    ->formatStateUsing(fn ($state) =>  $state .' '. config('filament.investment_currency.code')),
+                    ->money(config('filament.investment_currency.code')),
 
                 Tables\Columns\TextColumn::make('total')
                     ->sortable()
-                    ->formatStateUsing(fn ($state) =>  $state .' '. config('filament.investment_currency.code'))
+                    ->money(config('filament.investment_currency.code'))
                     ->badge(),
 
                 Tables\Columns\TextColumn::make('conversion_rate')
                     ->label('Conversion Rate')
                     ->sortable()
-                    ->formatStateUsing(fn ($state) =>  $state .' '. config('filament.currency.code')),
+                    ->money(config('filament.currency.code')),
             ])
             ->defaultSort('id', 'desc')
             ->filters([

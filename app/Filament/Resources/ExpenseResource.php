@@ -61,8 +61,8 @@ class ExpenseResource extends Resource
                 ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Amount')
-                    ->formatStateUsing(fn ($state) =>  number_format($state, 0) .' '. config('filament.currency.code'))
-                    ->sortable(),
+                    ->sortable()
+                    ->money(config('filament.currency.code')),
                 Tables\Columns\TextColumn::make('description')
                 ->label('Description')
                 ->searchable()
