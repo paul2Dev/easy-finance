@@ -37,8 +37,8 @@ class Investment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function investmentInstrument()
+    public function instrument()
     {
-        return $this->belongsTo(InvestmentInstrument::class);
+        return $this->belongsTo(InvestmentInstrument::class, 'investment_instrument_id');
     }
 }
