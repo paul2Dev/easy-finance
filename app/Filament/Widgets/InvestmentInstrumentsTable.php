@@ -48,19 +48,24 @@ class InvestmentInstrumentsTable extends BaseWidget
                 Tables\Columns\TextColumn::make('total_invested')
                     ->label('Total Invested')
                     ->sortable()
-                    ->money(config('filament.investment_currency.code')),
+                    ->money(config('filament.investment_currency.code'))
+                    ->badge(),
 
                 // DCA Price Column
                 Tables\Columns\TextColumn::make('dca_price')
                     ->label('DCA Price')
                     ->sortable()
-                    ->money(config('filament.investment_currency.code')),
+                    ->money(config('filament.investment_currency.code'))
+                    ->color('info')
+                    ->badge(),
 
                 // Actual Price - Placeholder for actual price logic
                 Tables\Columns\TextColumn::make('price')
                     ->label('Actual Price')
                     ->sortable()
-                    ->money(config('filament.investment_currency.code')),
+                    ->money(config('filament.investment_currency.code'))
+                    ->color('primary')
+                    ->badge(),
 
                 // Profit Column (Calculated field based on current price)
                 Tables\Columns\TextColumn::make('profit')
@@ -71,12 +76,23 @@ class InvestmentInstrumentsTable extends BaseWidget
                         $actualPrice = $record->price;
                         $totalValue = $record->total_units * $actualPrice;
                         return $totalValue - $record->total_invested;
-                    }),
+                    })
+                    ->color(
+                        // Color the total units based on the value
+                        function ($record) {
+                            $actualPrice = $record->price;
+                            $totalValue = $record->total_units * $actualPrice;
+                            return $totalValue - $record->total_invested > 0 ? 'success' : 'danger';
+                        }
+                    )
+                    ->badge(),
 
                 // Total Units Column
                 Tables\Columns\TextColumn::make('total_units')
                     ->label('Total Units')
-                    ->sortable(),
+                    ->sortable()
+                    ->color('gray')
+                    ->badge(),
             ]);
     }
 }

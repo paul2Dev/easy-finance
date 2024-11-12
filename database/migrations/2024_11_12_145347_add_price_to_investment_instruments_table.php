@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('investment_instruments', function (Blueprint $table) {
-            $table->decimal('price', 10, 2)->nullable()->after('ticker'); // Assuming ticker exists
+            $table->decimal('price', 10, 6)->nullable()->after('ticker'); // Assuming ticker exists
         });
     }
 
