@@ -7,8 +7,7 @@ use App\Models\Expense;
 
 class ExpensesByCategoryPieChart extends ChartWidget
 {
-    protected static ?string $heading = 'Current Month Expenses Categories';
-
+    protected static ?string $heading = 'Current Month Expenses Distribution (%)';
     protected static ?int $sort = 3;
 
     protected function getData(): array
@@ -16,20 +15,23 @@ class ExpensesByCategoryPieChart extends ChartWidget
         // Query expenses grouped by category and sum their amounts
         $expensesByCategory = Expense::selectRaw('category_id, SUM(amount) as total')
             ->groupBy('category_id')
-            ->with('category') // Make sure category relationship is loaded
-            ->whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()]) // Filter by current month
+            ->with('category')
+            ->whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
 
-        // Prepare data for chart
+        // Calculate the total sum of expenses for the current month
+        $totalExpenses = $expensesByCategory->sum('total');
+
+        // Prepare data in percentage format
         $labels = $expensesByCategory->map(fn ($expense) => $expense->category->name)->toArray();
-        $data = $expensesByCategory->map(fn ($expense) => $expense->total)->toArray();
+        $data = $expensesByCategory->map(fn ($expense) => round(($expense->total / $totalExpenses) * 100, 2))->toArray();
 
         return [
             'labels' => $labels, // Categories
             'datasets' => [
                 [
-                    'label' => 'Total Expenses',
-                    'data' => $data, // Amounts
+                    'label' => 'Expense Distribution (%)',
+                    'data' => $data, // Percentages
                     'backgroundColor' => [
                         '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
                     ], // Customize colors
@@ -47,6 +49,7 @@ class ExpensesByCategoryPieChart extends ChartWidget
                 'legend' => [
                     'position' => 'right',
                 ],
+
             ],
             'scales' => [
                 'x' => [
@@ -62,7 +65,7 @@ class ExpensesByCategoryPieChart extends ChartWidget
                         'display' => false, // Disable grid lines on y-axis
                     ],
                     'ticks' => [
-                        'display' => false, // Disable ticks (numbers) on x-axis
+                        'display' => false, // Disable ticks (numbers) on y-axis
                     ],
                 ],
             ],
