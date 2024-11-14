@@ -16,12 +16,10 @@ class TotalStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $userId = Auth::id();
         $startOfMonth = Carbon::now()->startOfMonth();
 
         // Find the last day in the current month with an Income for the user
-        $lastIncomeDate = Income::where('user_id', $userId)
-            ->whereBetween('date', [$startOfMonth, Carbon::now()->endOfMonth()])
+        $lastIncomeDate = Income::whereBetween('date', [$startOfMonth, Carbon::now()->endOfMonth()])
             ->latest('date')
             ->value('date');
 
@@ -34,8 +32,7 @@ class TotalStats extends BaseWidget
         // Loop through each day from the start of the month to the last Income date
         foreach ($startOfMonth->daysUntil($endDate->addDay()) as $day) {
             // Get total Incomes for the current day
-            $dailyTotal = Income::where('user_id', $userId)
-                ->whereDate('date', $day)
+            $dailyTotal = Income::whereDate('date', $day)
                 ->sum('amount');
 
             // Add daily total to the array
@@ -46,8 +43,7 @@ class TotalStats extends BaseWidget
         $totalMonthlyIncomes = number_format(array_sum($dailyIncomes)) .' '. config('filament.currency.code');
 
         // Find the last day in the current month with an expense for the user
-        $lastExpenseDate = Expense::where('user_id', $userId)
-            ->whereBetween('date', [$startOfMonth, Carbon::now()->endOfMonth()])
+        $lastExpenseDate = Expense::whereBetween('date', [$startOfMonth, Carbon::now()->endOfMonth()])
             ->latest('date')
             ->value('date');
 
@@ -60,8 +56,7 @@ class TotalStats extends BaseWidget
         // Loop through each day from the start of the month to the last expense date
         foreach ($startOfMonth->daysUntil($endDate->addDay()) as $day) {
             // Get total expenses for the current day
-            $dailyTotal = Expense::where('user_id', $userId)
-                ->whereDate('date', $day)
+            $dailyTotal = Expense::whereDate('date', $day)
                 ->sum('amount');
 
             // Add daily total to the array
