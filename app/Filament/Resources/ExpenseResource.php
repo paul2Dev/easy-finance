@@ -34,6 +34,7 @@ class ExpenseResource extends Resource
 
                 Forms\Components\DatePicker::make('date')
                     ->label('Date')
+                    ->default(now())
                     ->required(),
 
                 Forms\Components\TextInput::make('amount')

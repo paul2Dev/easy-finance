@@ -33,6 +33,7 @@ class InvestmentResource extends Resource
                 ->required(),
 
             Forms\Components\DatePicker::make('date')
+                ->default(now())
                 ->required(),
 
             Forms\Components\Textarea::make('description')

@@ -29,6 +29,7 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
     public ?int $category_id = null;
     public ?float $amount = null;
     public ?string $date = null;
+    public ?string $description = null;
 
     protected function getFormSchema(): array
     {
@@ -64,6 +65,11 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
                         ->label('Date')
                         ->default(now())
                         ->required(),
+
+                    TextInput::make('description')
+                        ->label('Description')
+                        ->required()
+                        ->columnSpan(2),
                 ])
                 ->columns(2) // Create two columns
                 ->columnSpan(2), // Allow the form to span the entire width
@@ -91,6 +97,7 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
                 'category_id' => $data['category_id'],
                 'amount' => $data['amount'],
                 'date' => $data['date'],
+                'description' => $data['description'],
             ]);
         } else {
             Expense::create([
@@ -98,6 +105,7 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
                 'category_id' => $data['category_id'],
                 'amount' => $data['amount'],
                 'date' => $data['date'],
+                'description' => $data['description'],
             ]);
         }
 

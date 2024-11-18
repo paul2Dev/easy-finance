@@ -50,7 +50,7 @@ class CategoryResource extends Resource
                     ->visibility('public') // Make the file publicly accessible
                     ->image()
                     ->imagePreviewHeight(150)
-                    ->required(),
+                    //->required(),
                 ])->columns(2)
             ]);
     }
