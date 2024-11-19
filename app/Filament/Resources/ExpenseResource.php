@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Filters\Filter;
+use App\Filament\Exports\ExpenseExporter;
+use Filament\Tables\Actions\ExportAction;
 
 class ExpenseResource extends Resource
 {
@@ -52,6 +54,11 @@ class ExpenseResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(ExpenseExporter::class)
+                    ->label('download export'),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                 ->label('Category')
