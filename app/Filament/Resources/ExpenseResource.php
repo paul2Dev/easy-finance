@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Filament\Tables\Filters\Filter;
 
 class ExpenseResource extends Resource
 {
@@ -71,7 +72,24 @@ class ExpenseResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->filters([
-                //
+                Filter::make('date_range')
+                    ->form([
+                        Forms\Components\DatePicker::make('from')
+                            ->label('From'),
+                        Forms\Components\DatePicker::make('to')
+                            ->label('To'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query
+                            ->when(
+                                $data['from'],
+                                fn ($query, $date) => $query->where('date', '>=', $date)
+                            )
+                            ->when(
+                                $data['to'],
+                                fn ($query, $date) => $query->where('date', '<=', $date)
+                            );
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
