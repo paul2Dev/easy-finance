@@ -23,10 +23,13 @@ class ExpensesByCategoryLineChart extends ChartWidget
     protected function getData(): array
     {
 
+        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
+        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
+
         // Query expenses for the current month grouped by category
         $expensesByCategory = Expense::selectRaw('category_id, amount, date')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth]) // Filter by current month
             ->with('category') // Make sure category relationship is loaded
-            ->whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()]) // Filter by current month
             ->orderBy('date', 'asc')
             ->get();
 

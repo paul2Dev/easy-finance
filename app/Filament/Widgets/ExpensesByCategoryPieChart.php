@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use App\Models\Expense;
+use Carbon\Carbon;
 
 class ExpensesByCategoryPieChart extends ChartWidget
 {
@@ -12,11 +13,15 @@ class ExpensesByCategoryPieChart extends ChartWidget
 
     protected function getData(): array
     {
+
+        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
+        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
+
         // Query expenses grouped by category and sum their amounts
         $expensesByCategory = Expense::selectRaw('category_id, SUM(amount) as total')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
             ->groupBy('category_id')
             ->with('category')
-            ->whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
 
         // Calculate the total sum of expenses for the current month
