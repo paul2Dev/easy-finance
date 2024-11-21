@@ -16,74 +16,34 @@ class TotalStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $startOfMonth = Carbon::now()->startOfMonth();
+        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
+        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
 
-        // Find the last day in the current month with an Income for the user
-        $lastIncomeDate = Income::whereBetween('date', [$startOfMonth, Carbon::now()->endOfMonth()])
-            ->latest('date')
-            ->value('date');
+        $totalIncomes = Income::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
 
-        // If no Incomes are found, default to today
-        $endDate = $lastIncomeDate ? Carbon::parse($lastIncomeDate) : Carbon::now();
+        $totalMonthlyIncomes = number_format($totalIncomes) .' '. config('filament.currency.code');
 
-        // Initialize an array to store daily Incomes up to the last Income date
-        $dailyIncomes = [];
+        $totalExpenses = Expense::whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
 
-        // Loop through each day from the start of the month to the last Income date
-        foreach ($startOfMonth->daysUntil($endDate->addDay()) as $day) {
-            // Get total Incomes for the current day
-            $dailyTotal = Income::whereDate('date', $day)
-                ->sum('amount');
+        $totalMonthlyExpenses = number_format($totalExpenses) .' '. config('filament.currency.code');
 
-            // Add daily total to the array
-            $dailyIncomes[] = $dailyTotal;
-        }
-
-        // Calculate the total Incomes for the current month up to the last Income date
-        $totalMonthlyIncomes = number_format(array_sum($dailyIncomes)) .' '. config('filament.currency.code');
-
-        // Find the last day in the current month with an expense for the user
-        $lastExpenseDate = Expense::whereBetween('date', [$startOfMonth, Carbon::now()->endOfMonth()])
-            ->latest('date')
-            ->value('date');
-
-        // If no expenses are found, default to today
-        $endDate = $lastExpenseDate ? Carbon::parse($lastExpenseDate) : Carbon::now();
-
-        // Initialize an array to store daily expenses up to the last expense date
-        $dailyExpenses = [];
-
-        // Loop through each day from the start of the month to the last expense date
-        foreach ($startOfMonth->daysUntil($endDate->addDay()) as $day) {
-            // Get total expenses for the current day
-            $dailyTotal = Expense::whereDate('date', $day)
-                ->sum('amount');
-
-            // Add daily total to the array
-            $dailyExpenses[] = $dailyTotal;
-        }
-
-        // Calculate the total expenses for the current month up to the last expense date
-        $totalMonthlyExpenses = number_format(array_sum($dailyExpenses)) .' '. config('filament.currency.code');
-
-        $cashFlow = number_format(array_sum($dailyIncomes) - array_sum($dailyExpenses)) .' '. config('filament.currency.code');
+        $cashFlow = number_format($totalIncomes - $totalExpenses) .' '. config('filament.currency.code');
 
         return [
             Stat::make('Incomes', $totalMonthlyIncomes)
                 ->description('Total Incomes for this month')
                 ->descriptionIcon('heroicon-o-arrow-trending-up')
-                ->color('success')
-                ->chart($dailyIncomes), // Pass daily Incomes up to the last Income day to the chart
+                ->color('success'),
             Stat::make('Expenses', $totalMonthlyExpenses)
                 ->description('Total Expenses for this month')
                 ->descriptionIcon('heroicon-o-arrow-trending-down')
-                ->color('danger')
-                ->chart($dailyExpenses), // Pass daily expenses up to the last expense day to the chart
+                ->color('danger'),
             Stat::make('Cash Flow', $cashFlow)
                 ->description('Remaining cash flow for this month')
                 ->descriptionIcon('heroicon-o-banknotes')
                 ->color('warning')
-
         ];
     }
 }

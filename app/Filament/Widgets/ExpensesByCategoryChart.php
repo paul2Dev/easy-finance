@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Expense;
 use App\Models\Budget;
+use App\Models\Category;
 use Filament\Widgets\ChartWidget;
 use Carbon\Carbon;
 
@@ -20,39 +21,34 @@ class ExpensesByCategoryChart extends ChartWidget
 
     protected function getData(): array
     {
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
+        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
+        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
 
-        // Fetch expense data grouped by category ID for the current month
-        $expenseData = Expense::with('category')
-            ->whereMonth('date', $currentMonth)
-            ->whereYear('date', $currentYear)
-            ->get()
-            ->groupBy('category_id')
-            ->map(function ($expenses) {
-                return $expenses->sum('amount');
-            });
+        // Eager load category relationships for expenses and budgets
+        $expenses = Expense::with('category')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->get();
 
-        // Fetch budget data grouped by category ID
-        $budgetData = Budget::with('category')
-            ->whereIn('category_id', $expenseData->keys())
-            ->get()
-            ->groupBy('category_id')
-            ->map(function ($budgets) {
-                return $budgets->sum('amount');
-            });
+        $budgets = Budget::with('category')
+            ->whereIn('category_id', $expenses->pluck('category_id'))
+            ->get();
 
-        // Prepare data for chart labels and datasets
-        $categories = $expenseData->keys()->merge($budgetData->keys())->unique();
+        // Use collections to group and sum data
+        $expenseData = $expenses->groupBy('category_id')->map(fn($expenses) => $expenses->sum('amount'));
+        $budgetData = $budgets->groupBy('category_id')->map(fn($budgets) => $budgets->sum('amount'));
+
+        // Fetch all necessary categories in a single query
+        $categories = Category::whereIn('id', $expenseData->keys()->merge($budgetData->keys()))->get();
+
+        // Map data for the chart
+        $categoryLabels = [];
         $expenseValues = [];
         $budgetValues = [];
-        $categoryLabels = [];
 
-        foreach ($categories as $categoryId) {
-            $category = \App\Models\Category::find($categoryId);
-            $categoryLabels[] = $category ? $category->name : 'Unknown';
-            $expenseValues[] = $expenseData->get($categoryId, 0);
-            $budgetValues[] = $budgetData->get($categoryId, 0);
+        foreach ($categories as $category) {
+            $categoryLabels[] = $category->name;
+            $expenseValues[] = $expenseData->get($category->id, 0);
+            $budgetValues[] = $budgetData->get($category->id, 0);
         }
 
         return [
