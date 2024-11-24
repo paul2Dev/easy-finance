@@ -92,8 +92,8 @@ class InvestmentInstrumentResource extends Resource
     {
         return [
             'index' => Pages\ListInvestmentInstruments::route('/'),
-            'create' => Pages\CreateInvestmentInstrument::route('/create'),
-            'edit' => Pages\EditInvestmentInstrument::route('/{record}/edit'),
+            //'create' => Pages\CreateInvestmentInstrument::route('/create'),
+            //'edit' => Pages\EditInvestmentInstrument::route('/{record}/edit'),
         ];
     }
 }

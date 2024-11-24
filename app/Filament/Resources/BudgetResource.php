@@ -77,8 +77,8 @@ class BudgetResource extends Resource
     {
         return [
             'index' => Pages\ListBudgets::route('/'),
-            'create' => Pages\CreateBudget::route('/create'),
-            'edit' => Pages\EditBudget::route('/{record}/edit'),
+            //'create' => Pages\CreateBudget::route('/create'),
+            //'edit' => Pages\EditBudget::route('/{record}/edit'),
         ];
     }
 }

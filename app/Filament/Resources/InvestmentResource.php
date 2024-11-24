@@ -162,8 +162,8 @@ class InvestmentResource extends Resource
     {
         return [
             'index' => Pages\ListInvestments::route('/'),
-            'create' => Pages\CreateInvestment::route('/create'),
-            'edit' => Pages\EditInvestment::route('/{record}/edit'),
+            //'create' => Pages\CreateInvestment::route('/create'),
+            //'edit' => Pages\EditInvestment::route('/{record}/edit'),
         ];
     }
 }
