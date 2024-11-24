@@ -21,8 +21,7 @@ class ExpensesByCategoryChart extends ChartWidget
 
     protected function getData(): array
     {
-        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
-        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
+        [$startOfMonth, $endOfMonth] = Carbon::now()->customMonthRange();
 
         // Eager load category relationships for expenses and budgets
         $expenses = Expense::with('category')

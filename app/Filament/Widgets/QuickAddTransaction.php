@@ -115,6 +115,7 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
             'category_id' => null,
             'amount' => null,
             'date' => now(),
+            'description' => null,
         ]);
 
         // Send a success notification

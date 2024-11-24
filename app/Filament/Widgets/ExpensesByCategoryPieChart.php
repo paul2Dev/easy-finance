@@ -14,8 +14,7 @@ class ExpensesByCategoryPieChart extends ChartWidget
     protected function getData(): array
     {
 
-        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
-        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
+        [$startOfMonth, $endOfMonth] = Carbon::now()->customMonthRange();
 
         // Query expenses grouped by category and sum their amounts
         $expensesByCategory = Expense::selectRaw('category_id, SUM(amount) as total')

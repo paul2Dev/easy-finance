@@ -16,8 +16,7 @@ class TotalStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $startOfMonth = Carbon::now()->startOfMonth()->addDays(9);
-        $endOfMonth = Carbon::now()->endOfMonth()->addDays(10);
+        [$startOfMonth, $endOfMonth] = Carbon::now()->customMonthRange();
 
         $totalIncomes = Income::whereBetween('date', [$startOfMonth, $endOfMonth])
             ->sum('amount');
