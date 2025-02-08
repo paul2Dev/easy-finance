@@ -28,6 +28,7 @@ class TotalStats extends BaseWidget
 
         $totalMonthlyExpenses = number_format($totalExpenses) .' '. config('filament.currency.code');
 
+
         $cashFlow = number_format($totalIncomes - $totalExpenses) .' '. config('filament.currency.code');
 
         return [

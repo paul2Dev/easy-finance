@@ -68,7 +68,6 @@ class QuickAddTransaction extends Widget implements Forms\Contracts\HasForms
 
                     TextInput::make('description')
                         ->label('Description')
-                        ->required()
                         ->columnSpan(2),
                 ])
                 ->columns(2) // Create two columns
