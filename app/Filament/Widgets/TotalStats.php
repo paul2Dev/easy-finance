@@ -8,6 +8,7 @@ use App\Models\Expense;
 use App\Models\Income;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Bill;
 
 class TotalStats extends BaseWidget
 {
@@ -31,6 +32,9 @@ class TotalStats extends BaseWidget
 
         $cashFlow = number_format($totalIncomes - $totalExpenses) .' '. config('filament.currency.code');
 
+        // Count the number of pending bills for the current month
+        $remainingBillsToPay = Bill::where('status', 'pending')->count();
+
         return [
             Stat::make('Incomes', $totalMonthlyIncomes)
                 ->description('Total Incomes for this month')
@@ -43,7 +47,11 @@ class TotalStats extends BaseWidget
             Stat::make('Cash Flow', $cashFlow)
                 ->description('Remaining cash flow for this month')
                 ->descriptionIcon('heroicon-o-banknotes')
-                ->color('warning')
+                ->color('warning'),
+            Stat::make('Remaining Bills', $remainingBillsToPay)
+                ->description('Number of bills remaining to be paid this month')
+                ->descriptionIcon('heroicon-o-document-text') // Icon of your choice
+                ->color('warning') // You can change the color based on your preference
         ];
     }
 }
