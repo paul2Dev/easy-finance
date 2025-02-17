@@ -12,7 +12,7 @@ class ExpensesLineChart extends ChartWidget
 
     protected static ?string $heading = 'Total Expenses';
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     public ?string $filter = 'month';
 

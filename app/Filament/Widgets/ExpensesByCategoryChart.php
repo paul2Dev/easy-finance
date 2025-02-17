@@ -12,7 +12,7 @@ class ExpensesByCategoryChart extends ChartWidget
 {
     protected static ?string $heading = 'Total Expenses vs Budget by Category (Current Month)';
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 4;
 
     protected function getType(): string
     {

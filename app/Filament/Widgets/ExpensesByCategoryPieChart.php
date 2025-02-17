@@ -9,7 +9,8 @@ use Carbon\Carbon;
 class ExpensesByCategoryPieChart extends ChartWidget
 {
     protected static ?string $heading = 'Current Month Expenses Distribution (%)';
-    protected static ?int $sort = 3;
+    
+    protected static ?int $sort = 5;
 
     protected function getData(): array
     {
