@@ -22,6 +22,7 @@ class ExpensesLineChart extends ChartWidget
             'week' => 'Last Week',
             'month' => 'Last Month',
             '3months' => 'Last 3 Months',
+            '6months' => 'Last 6 Months',
 
         ];
     }
@@ -43,15 +44,19 @@ class ExpensesLineChart extends ChartWidget
 
         match ($filter) {
             'week' => [
-                $startPeriod = Carbon::now()->startOfWeek(),
-                $endPeriod = Carbon::now()->endOfWeek()
+                $startPeriod = Carbon::now()->subWeek()->startOfWeek(),
+                $endPeriod = Carbon::now()->subWeek()->endOfWeek()
             ],
             'month' => [
                 $startPeriod = $starOfPeriod,
                 $endPeriod = $endOfPeriod
             ],
             '3months' => [
-                $startPeriod = Carbon::now()->subMonths(3),
+                $startPeriod = Carbon::now()->subMonths(3)->startOfMonth(),
+                $endPeriod = Carbon::now()->endOfMonth()
+            ],
+            '6months' => [
+                $startPeriod = Carbon::now()->subMonths(6)->startOfMonth(),
                 $endPeriod = Carbon::now()->endOfMonth()
             ],
         };
